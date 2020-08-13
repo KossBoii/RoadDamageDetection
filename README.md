@@ -27,12 +27,12 @@ svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_
 cd detectron2/projects/RoadStress/
 ```
 
-# Step 4: Train the model
+### Step 4: Train the model
 ```bash
 sbatch running_script/train.sh training-dataset backbone-model
 ```
 
-# Step 5: Evalute/Inferencing using the trained model
+### Step 5: Evalute/Inferencing using the trained model
 - For inferencing:\
 ```bash
 sbatch running_script/update_predict.sh [list of models' name]
