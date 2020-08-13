@@ -42,6 +42,6 @@ sbatch running_script/update_predict.sh [list of models' name]
 sbatch running_script/evaluate.sh [list of models' name]
 ```
 
-Notes for both inference/evaluation script: 
+**Notes for both inference/evaluation script:** 
 - First go into the output file and get models' folder name (Ex:/output/06102020121824/). By specifiying list of models' name, the script will run through just these files
 - Without specifying the list of models' name, the script will run through all the folder existing in the output folder
