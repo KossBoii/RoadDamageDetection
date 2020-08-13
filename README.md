@@ -33,11 +33,11 @@ sbatch running_script/train.sh training-dataset backbone-model
 ```
 
 ### Step 5: Evalute/Inferencing using the trained model
-- For inferencing:\
+- For inferencing:
 ```bash
 sbatch running_script/update_predict.sh [list of models' name]
 ```
-- For evaluation:\
+- For evaluation:
 ```bash
 sbatch running_script/evaluate.sh [list of models' name]
 ```
