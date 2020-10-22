@@ -2,7 +2,7 @@
 
 ### Step 1: Clone the github file
 ```bash
-git clone https://github.com/KossBoii/RoadDamageDetection.git\
+git clone https://github.com/KossBoii/RoadDamageDetection.git
 ```
 
 ### Step 2: Create new Anaconda Environments to run the code:
