@@ -125,27 +125,8 @@ def main(args):
     return do_test(cfg, trainer.model)
 
 def custom_default_argument_parser(epilog=None):
-    """
-    Create a parser with some common arguments used by detectron2 users.
-
-    Args:
-        epilog (str): epilog passed to ArgumentParser describing the usage.
-
-    Returns:
-        argparse.ArgumentParser:
-    """
     parser = argparse.ArgumentParser(
-        epilog=epilog
-        or f"""
-Examples:
-
-Run on single machine:
-    $ {sys.argv[0]} --num-gpus 8 --config-file cfg.yaml MODEL.WEIGHTS /path/to/weight.pth
-
-Run on multiple machines:
-    (machine0)$ {sys.argv[0]} --machine-rank 0 --num-machines 2 --dist-url <URL> [--other-flags]
-    (machine1)$ {sys.argv[0]} --machine-rank 1 --num-machines 2 --dist-url <URL> [--other-flags]
-""",
+        epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--config-file", default="", metavar="FILE", help="path to config file")
