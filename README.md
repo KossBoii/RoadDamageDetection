@@ -57,7 +57,6 @@ pip install scikit-image
 ### **Step 3:** Fetch the Dataset:
 ```bash
 conda install -c anaconda svn
-cd detectron2/projects/RoadStress
 mkdir dataset
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_new ./dataset/roadstress_new
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_old ./dataset/roadstress_old

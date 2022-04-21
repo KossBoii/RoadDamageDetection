@@ -1,3 +1,8 @@
-detectron2/projects/Transportation/__pycache__/
-detectron2/projects/Transportation/output/
-detectron2/projects/Transportation/slurm_log/
+slurm_log/
+prediction/
+output/
+*/__pycache__
+__pycache__/*
+dataset/
+slurm_log/
+test.py
