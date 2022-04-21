@@ -121,7 +121,7 @@ def get_dataset_dicts(img_path):
                 objs = []
                 for anno in annos:
                     shape_attr = anno['shape_attributes']
-                    class_name = annos['region_attributes']['name']
+                    class_name = anno['region_attributes']['name']
                     px = shape_attr['all_points_x']
                     py = shape_attr['all_points_y']
 

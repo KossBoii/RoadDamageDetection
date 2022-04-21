@@ -52,7 +52,7 @@ Download Mask R-CNN Code to HPC using Git Clone
 git clone https://github.com/KossBoii/RoadDamageDetection.git
 ```
 
-Change durrent directory to *RoadDamageDetection*
+Change durrent directory to *RoadDamageDetection*gi
 ```
 cd RoadDamageDetection
 ```
