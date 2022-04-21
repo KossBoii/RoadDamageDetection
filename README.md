@@ -61,19 +61,23 @@ pip install opencv-python
 pip install scikit-image
 ```
 
-a) Having Nvidia card (Using GPU to train ~ **faster**):
+- Having Nvidia card (Using GPU to train ~ **faster**):
 
-*Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
+    *Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
+
+    ```bash
+    conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+    ```
+
+- Not Having Nvidia card (Using CPU to train ~ **slower**):
+
+    ```bash
+    conda install pytorch torchvision torchaudio cpuonly -c pytorch
+    ```
+
+After downloading and setting up PyTorch + TorchVision + TorchAudio, install Detectron2:
 
 ```bash
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
-python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
-```
-
-b) Not Having Nvidia card (Using CPU to train ~ **slower**):
-
-```bash
-conda install pytorch torchvision torchaudio cpuonly -c pytorch
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
@@ -93,7 +97,7 @@ svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_
 ### **Step 4:** Train the Models:
 
 ```bash
-sbatch running_script/train.sh [training-dataset] [backbone-model]
+sbatch running_script/train.sh [dataset_name] [backbone_model]
 ```
 
 <br />
@@ -126,6 +130,7 @@ git clone https://github.com/KossBoii/RoadDamageDetection.git
 <br />
 
 ### **Step 2:** Create & Setup Anaconda Environment:
+
 Create the Anaconda Virtual Environment
     
 ```bash
@@ -135,30 +140,42 @@ pip install opencv-python
 pip install scikit-image
 ```
 
-a) Having Nvidia card (Using GPU to train ~ **faster**):
+- Having Nvidia card (Using GPU to train ~ **faster**):
 
-*Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
+    *Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
 
+    ```bash
+    conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+    ```
+
+- Not Having Nvidia card (Using CPU to train ~ **slower**):
+
+    ```bash
+    conda install pytorch torchvision torchaudio cpuonly -c pytorch
+    ```
+
+After downloading and setting up PyTorch + TorchVision + TorchAudio, install Detectron2:
 
 ```bash
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
-python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
-```
-
-b) Not Having Nvidia card (Using CPU to train ~ **slower**):
-
-```bash
-conda install pytorch torchvision torchaudio cpuonly -c pytorch
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
 <br />
 
 ### **Step 3:** Fetch the Dataset:
-```bash
+```
 conda install -c anaconda svn
+```
+
+```
 mkdir dataset
+```
+
+```
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_new ./dataset/roadstress_new
+```
+
+```
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_old ./dataset/roadstress_old
 ```
 
@@ -204,7 +221,7 @@ python3 evaluate.py --config-file "./output/[folder_name]/config.yaml" \
 
 # Notes:
 
-Notes for both inference/evaluation script:
+## Notes for both inference/evaluation script:
 
 - HPC: 
 
@@ -215,3 +232,21 @@ Notes for both inference/evaluation script:
 - Local Machine:
 
     - Inference/evaluation script can only be run each trained model separately
+
+## Notes for training script:
+- Replace `[dataset_name]` 
+
+- Replace `[backbone_model]` with one of the options from table below:
+
+Backbone Model Name | [backbone_model]
+| :--- | :--- 
+R50_C4_1x | "COCO-InstanceSegmentation/mask_rcnn_R_50_C4_1x.yaml"
+R50_DC5_1x | "COCO-InstanceSegmentation/mask_rcnn_R_50_DC5_1x.yaml"
+R50_FPN_1x | "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
+R50_C4_3x | "COCO-InstanceSegmentation/mask_rcnn_R_50_C4_3x.yaml"
+R50_DC5_3x | "COCO-InstanceSegmentation/mask_rcnn_R_50_DC5_3x.yaml"
+R50_FPN_3x | "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+R101_C4_3x | "COCO-InstanceSegmentation/mask_rcnn_R_101_C4_3x.yaml"
+R101_DC5_3x | "COCO-InstanceSegmentation/mask_rcnn_R_101_DC5_3x.yaml"
+R101_FPN_3x | "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"
+X101_32x8d_FPN_3x | "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"
