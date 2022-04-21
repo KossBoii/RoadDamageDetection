@@ -131,7 +131,7 @@ def get_dataset_dicts(img_path):
                     obj = {
                         'bbox': [np.min(px), np.min(py), np.max(px), np.max(py)],
                         'bbox_mode': BoxMode.XYXY_ABS,
-                        'segmenttion': [poly],
+                        'segmentation': [poly],
                         'category_id': category_to_id[class_name],
                         'is_crowd': 0
                     }
