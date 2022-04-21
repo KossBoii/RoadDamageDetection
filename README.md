@@ -28,7 +28,7 @@ Intro to Installation (In Progress...)
 
 - When connected to CPP's VPN, run the command below and type in the password to access HPC through command line (where username is CPP's username+password credentials)
 
-```bash
+```
 ssh -l [username] hpc.cpp.edu
 ````
 
@@ -42,9 +42,18 @@ ssh -l [username] hpc.cpp.edu
 
 ### **Step 1:** Clone the GitHub Repository in */data03/home/username*:
 
-```bash
+Change current directory to */data03/home/username*
+```
 cd /data03/home/username/
+```
+
+Download Mask R-CNN Code to HPC using Git Clone
+```
 git clone https://github.com/KossBoii/RoadDamageDetection.git
+```
+
+Change durrent directory to *RoadDamageDetection*
+```
 cd RoadDamageDetection
 ```
 
@@ -54,10 +63,19 @@ cd RoadDamageDetection
 
 Create the Anaconda Virtual Environment
     
-```bash
+```
 conda create --name py3 python=3.7.0
+```
+
+```
 conda activate py3
+```
+
+```
 pip install opencv-python
+```
+
+```
 pip install scikit-image
 ```
 
@@ -65,19 +83,19 @@ pip install scikit-image
 
     *Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
 
-    ```bash
+    ```
     conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
     ```
 
 - Not Having Nvidia card (Using CPU to train ~ **slower**):
 
-    ```bash
+    ```
     conda install pytorch torchvision torchaudio cpuonly -c pytorch
     ```
 
 After downloading and setting up PyTorch + TorchVision + TorchAudio, install Detectron2:
 
-```bash
+```
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
@@ -85,10 +103,19 @@ python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 
 ### **Step 3:** Fetch the Dataset:
 
-```bash
+```
 conda install -c anaconda svn
+```
+
+```
 mkdir dataset
+```
+
+```
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_new ./dataset/roadstress_new
+```
+
+```
 svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_old ./dataset/roadstress_old
 ```
 
@@ -106,13 +133,13 @@ sbatch running_script/train.sh [dataset_name] [backbone_model]
 
 **Inferencing:**
 
-```bash
+```
 sbatch running_script/update_predict.sh [list of models' name]
 ```
 
 **Evaluation:**
 
-```bash
+```
 sbatch running_script/evaluate.sh [list of models' name]
 ```
 
@@ -123,7 +150,7 @@ sbatch running_script/evaluate.sh [list of models' name]
  
 ### **Step 1:** Clone the GitHub Repository in the directory you want:
 
-```bash
+```
 git clone https://github.com/KossBoii/RoadDamageDetection.git
 ```
 
@@ -133,10 +160,19 @@ git clone https://github.com/KossBoii/RoadDamageDetection.git
 
 Create the Anaconda Virtual Environment
     
-```bash
+```
 conda create --name py3 python=3.7.0
+```
+
+```
 conda activate py3
+```
+
+```
 pip install opencv-python
+```
+
+```
 pip install scikit-image
 ```
 
@@ -144,19 +180,19 @@ pip install scikit-image
 
     *Note: Make sure to go to this [link](https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local) to download and setup CUDA Toolkit 11.3*
 
-    ```bash
+    ```
     conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
     ```
 
 - Not Having Nvidia card (Using CPU to train ~ **slower**):
 
-    ```bash
+    ```
     conda install pytorch torchvision torchaudio cpuonly -c pytorch
     ```
 
 After downloading and setting up PyTorch + TorchVision + TorchAudio, install Detectron2:
 
-```bash
+```
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
@@ -183,7 +219,7 @@ svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_
 
 ### **Step 4:** Train the Models:
 
-```bash
+```
 python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 ```
 
@@ -193,7 +229,7 @@ python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 
 **Inferencing:**
 
-```bash
+```
 python3 update_infer.py --config-file "./output/[folder_name]/config.yaml" \
 			--dataset "./dataset/" \
 		 	--weight "./output/[folder_name]/model_final.pth" \
@@ -202,7 +238,7 @@ python3 update_infer.py --config-file "./output/[folder_name]/config.yaml" \
 
 **Evaluation:**
 
-```bash
+```
 python3 evaluate.py --config-file "./output/[folder_name]/config.yaml" \
 			--dataset "./dataset/" \
 		 	--weight "./output/[folder_name]/model_final.pth" \
@@ -234,7 +270,7 @@ python3 evaluate.py --config-file "./output/[folder_name]/config.yaml" \
     - Inference/evaluation script can only be run each trained model separately
 
 ## Notes for training script:
-- Replace `[dataset_name]` 
+- Replace `[dataset_name]` with the user's actual training dataset name in `dataset` folder (i.e., *roadstress_new* or *roadstress_old*)
 
 - Replace `[backbone_model]` with one of the options from table below:
 
