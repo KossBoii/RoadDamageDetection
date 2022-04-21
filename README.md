@@ -18,8 +18,6 @@ Intro to Installation (In Progress...)
 
 ## **High Performance Computing (HPC)**
 
-<br />  
-
 ### **Step 0:** Logging into HPC (Cal Poly Pomona)
 
 - Fill in the form at this [link](https://www.cpp.edu/lrt/hpc/hpc-support.shtml) to request the access to HPC
@@ -118,8 +116,6 @@ sbatch running_script/evaluate.sh [list of models' name]
 <br />
 
 ## **Local Machine**
-
-<br />
  
 ### **Step 1:** Clone the GitHub Repository in the directory you want:
 
