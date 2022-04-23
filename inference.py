@@ -1,99 +1,96 @@
-from utils import * 
-import random
-from detectron2.utils.logger import setup_logger
-from detectron2.utils.visualizer import Visualizer, ColorMode
-import torch, torchvision
-
+from utils import *
 logger = logging.getLogger("detectron2")
 
-def config(args):
-	# load config from file and command-line arguments
-	cfg = get_cfg()
-	cfg.merge_from_file(args.config_file)
-	cfg.merge_from_list(args.opts)
-
-	# Set score_threshold for builtin models
-	# cfg.MODEL.RETINANET.SCORE_THRESH_TEST = args.confidence_threshold
-	# cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = args.confidence_threshold
-	# cfg.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = args.confidence_threshold
-	cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.45
-	cfg.TEST.DETECTIONS_PER_IMAGE = 1000
-	cfg.MODEL.WEIGHTS = args.weight
-	cfg.MODEL.RPN.POST_NMS_TOPK_TEST = 5000  # originally 1000
-	cfg.MODEL.RPN.PRE_NMS_TOPK_TEST = 5000  # originally 1000
-	cfg.freeze()
-	return cfg
+def get_config(args):
+    # load config from file and command-line arguments
+    cfg = get_cfg()
+    cfg.merge_from_file(os.path.join(os.getcwd(), 'output', args.model_name, 'config.yaml'))
+    
+    # configs from user's arguments
+    cfg.merge_from_list(args.opts)
+    return cfg
 
 def get_parser():
-	parser = argparse.ArgumentParser(description="Detectron2 inference for road stress")
-	parser.add_argument("--config-file", required=True, metavar="FILE", help="path to config file")
-	parser.add_argument("--dataset", required=True, help="path to dataset folder")
-	parser.add_argument("--weight", required=True, metavar="FILE", help="path to weight file")
-	parser.add_argument("--output", help="A file or directory to save output visualizations. If not given, will show output in an OpenCV window.")
-	parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-	parser.add_argument("--opts", help="Modify config options using the command-line 'KEY VALUE' pairs", default=[], nargs=argparse.REMAINDER,)
-	return parser
+    parser = argparse.ArgumentParser(description="Detectron2 inference for road stress")
+    parser.add_argument('--model-name', required=True, help="model name to be evaluated")
+    parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
 
-def run_on_image(predictor, image):
-	predictions = predictor(image)
-	vis = Visualizer(image[:, :, ::-1], metadata=MetadataCatalog.get("roadstress_train"), instance_mode=ColorMode.IMAGE)
-	#vis = Visualizer(image[:, :, ::-1],
-        #	metadata=MetadataCatalog.get("roadstress_train"), 
-        #	scale=1.0, 
-        #	instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
-	#)
-	if "instances" in predictions:
-		instances = predictions["instances"].to(torch.device("cpu"))
-		print(len(instances))
-		# for i in range(0, 4):
-		#	j = random.randint(0, len(instances) - 1)
-		#	print(instances.get("pred_masks")[j])
-		#	torchvision.utils.save_image(instances.get("pred_masks")[j], os.path.join(args.output, "instances_" + str(j) +".JPG"))
-		#	cv2.imwrite(os.path.join(args.output, "instances_" + str(j) +".JPG"), instances.get("pred_masks")[j].numpy())
-		for i in range(0, 4):
-			j = random.randint(0, len(instances) - 1)
-			vis.draw_sem_seg(instances.get("pred_masks")[j]).save(os.path.join(args.output, "instances_" + str(j) +".JPG"))
-		vis_output = vis.draw_instance_predictions(predictions=instances)
-		return predictions, vis_output
-	else:
-		print("Something wrong. Please check the inference.py script")
+    parser.add_argument("--training-dataset", required=True, help="dataset name to train")
+    parser.add_argument("--config-file", required=True, metavar="FILE", help="path to config file")
+    parser.add_argument("--training-dataset", required=True, help="dataset name to train")
+    parser.add_argument("--dataset", required=True, help="path to dataset folder")
+    parser.add_argument("--weight", required=True, metavar="FILE", help="path to weight file")
+    parser.add_argument("--output", help="A file or directory to save output visualizations. If not given, will show output in an OpenCV window.")
+    parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
+    parser.add_argument("--opts", help="Modify config options using the command-line 'KEY VALUE' pairs", default=[], nargs=argparse.REMAINDER,)
+    return parser
+
+def run_on_image(predictor, dataset_name, image):
+    predictions = predictor(image)
+    dataset_metadata = MetadataCatalog.get(dataset_name + '_train')
+    vis = Visualizer(image[:, :, ::-1], metadata=dataset_metadata, instance_mode=ColorMode.IMAGE)
+    if 'instances' in predictions:
+        instances = predictions['instances'].to(torch.device('cpu'))
+        vis_output = vis.draw_instance_predictions(predictions=instances)
+        return predictions, vis_output
+    else:
+        print("Something wrong. Please check the inference.py script")
 
 if __name__ == "__main__":
-	args = get_parser().parse_args()
-	logger = setup_logger()
-	logger.info("Arguments: " + str(args))
+    args = get_parser().parse_args()
 
-	# Register the dataset:
-	for d in ["train", "val"]:
-		DatasetCatalog.register("roadstress_" + d, lambda d=d: get_roadstress_dicts("dataset/roadstress_new/" + d))
-		MetadataCatalog.get("roadstress_" + d).set(thing_classes=["roadstress"])
-		MetadataCatalog.get("roadstress_" + d).set(evaluator_type="coco")
-		roadstress_metadata = MetadataCatalog.get("roadstress_train")
-	print("Done Registering the dataset")
+    # Get configuration from the given trained model's config.yaml file & command-line arguments
+    cfg = get_cfg()
+    cfg.merge_from_file(os.path.join(os.getcwd(), 'output', args.model_name, 'config.yaml'))
+    cfg.merge_from_list(args.opts)                  # configs from user's arguments
 
+    dataset_name = cfg.DATASETS.TEST[0][:-6]
 
-	cfg = config(args)
-	print(cfg.dump())
-	print("Finish Setting Up Config")
+    # Pre-process the annotation files
+    dataset_basepath = os.path.join('./dataset', dataset_name)
+    anno_path = os.path.join(dataset_basepath, 'train', 'via_export_json.json')
+    thing_classes = pre_process_annos(anno_path)
 
-	predictor = DefaultPredictor(cfg)
-	print("Start Inferencing")
-	for img_path in glob.iglob(args.dataset + "/*.JPG"):
-		#print(img_path)
-		#print(os.path.basename(img_path))
-		img = cv2.imread(img_path)	
-		start_time = time.time()
-		predictions, vis_img = run_on_image(predictor, img)
-		logger.info(
-                	"{}: {} in {:.2f}s".format(
-                    		img_path,
-                    		"detected {} instances".format(len(predictions["instances"]))
-                    		if "instances" in predictions
-                    		else "finished",
-                    		time.time() - start_time,
+    # Register User's Dataset
+    for d in ['train', 'val']:
+        DatasetCatalog.register(dataset_name + '_' + d, lambda d=d: get_dataset_dicts(os.path.join(dataset_basepath, d)))
+        MetadataCatalog.get(dataset_name + '_' + d).set(thing_classes = thing_classes)
+        MetadataCatalog.get(dataset_name + '_' + d).set(evaluator_type = 'coco')
+    print('Done Registering the dataset!')
+    
+    # Set score_threshold for builtin models
+    cfg.MODEL.RETINANET.SCORE_THRESH_TEST = args.confidence_threshold
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = args.confidence_threshold
+    cfg.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = args.confidence_threshold
+    cfg.MODEL.WEIGHTS = os.path.join(os.getcwd(), 'output', args.model_name, 'model_final.pth')
+
+    # Create inference output: 
+    inference_output_path = os.path.join(os.getcwd(), 'prediction')
+    if not os.path.exists(inference_output_path):
+        os.makedirs(inference_output_path, exist_ok=True)
+    
+    os.makedirs(os.path.join(inference_output_path, dataset_name), exist_ok=True)
+
+    predictor = DefaultPredictor(cfg)
+
+    print('Start Inferencing')
+    for file_name in os.listdir(args.img_path):
+        temp = file_name.lower()
+        if temp.endswith('.jpg') or temp.endswith('.jpeg') or temp.endswith('png'):
+            # The file is an image
+            img = cv2.imread(file_name)
+            
+            start_time = time.time()
+            predictions, vis_img = run_on_image(predictor, dataset_name, img)
+            logger.info(
+                "{}: {} in {:.2f}s".format(
+                    	file_name,
+                    	"detected {} instances".format(len(predictions["instances"]))
+                    	if "instances" in predictions
+                    	else "finished",
+                    	time.time() - start_time,
                 	)
             	)
-		#vis_img.save(os.path.join(args.output, os.path.basename(img_path)))
-	#model = build_model(cfg)
-	#DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).load(cfg.MODEL.WEIGHTS)
-	#do_test(cfg, model)
+        
+        # save the image to the prediction directory
+        vis_img.save(os.path.join(inference_output_path, os.path.basename(file_name)))
