@@ -99,6 +99,23 @@ After downloading and setting up PyTorch + TorchVision + TorchAudio, install Det
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
+*Notes: **Error when installing Detectron2 on HPC*** 
+
+```
+gcc: error: unrecognized command line option '-std=c++14'
+error: command 'usr/bin/gcc' failed with exit code 1
+```
+
+To resolve this, run the commands below:
+
+```
+export PATH=/apps/local/gcc-11.2.0/bin:$PATH
+```
+
+```
+export LD_LIBRARY_PATH=/apps/local/gcc-11.2.0/lib64:$LD_LIBRARY_PATH
+```
+
 <br />
 
 ### **Step 3:** Fetch the Dataset:
