@@ -11,19 +11,12 @@ def get_config(args):
     return cfg
 
 def get_parser():
-    parser = argparse.ArgumentParser(description="Detectron2 inference for road stress")
-    parser.add_argument('--model-name', required=True, help="model name to be evaluated")
-    parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-
-    parser.add_argument("--training-dataset", required=True, help="dataset name to train")
-    parser.add_argument("--config-file", required=True, metavar="FILE", help="path to config file")
-    parser.add_argument("--training-dataset", required=True, help="dataset name to train")
-    parser.add_argument("--dataset", required=True, help="path to dataset folder")
-    parser.add_argument("--weight", required=True, metavar="FILE", help="path to weight file")
-    parser.add_argument("--output", help="A file or directory to save output visualizations. If not given, will show output in an OpenCV window.")
-    parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
-    parser.add_argument("--opts", help="Modify config options using the command-line 'KEY VALUE' pairs", default=[], nargs=argparse.REMAINDER,)
-    return parser
+	parser = argparse.ArgumentParser(description="Detectron2 inference for road stress")
+	parser.add_argument('--model-name', required=True, help="model name to be evaluated")
+	parser.add_argument("--confidence-threshold", type=float, default=0.5, help="Minimum score for instance predictions to be shown")
+	parser.add_argument("--img-path", required=True, help="the path to the folder having the images to run predictions on")
+	parser.add_argument("--opts", help="Modify config options using the command-line 'KEY VALUE' pairs", default=[], nargs=argparse.REMAINDER,)
+	return parser
 
 def run_on_image(predictor, dataset_name, image):
     predictions = predictor(image)
