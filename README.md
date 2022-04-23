@@ -99,46 +99,32 @@ After downloading and setting up PyTorch + TorchVision + TorchAudio, install Det
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 
-*Notes: **Error when installing Detectron2 on HPC*** 
+### *Notes: **Error when installing Detectron2 on HPC*** 
 
 ```
 gcc: error: unrecognized command line option '-std=c++14'
 error: command 'usr/bin/gcc' failed with exit code 1
 ```
 
-To resolve this, run the commands below to tell the system the path to the gcc version that supports c++14:
+- To resolve this, run the commands below to tell the system the path to the gcc version that supports c++14:
 
-```
-export PATH=/apps/local/gcc11.2.0/bin:$PATH
-```
+    ```
+    export PATH=/apps/local/gcc11.2.0/bin:$PATH
+    ```
 
-```
-export LD_LIBRARY_PATH=/apps/local/gcc11.2.0/lib64:$LD_LIBRARY_PATH
-```
+    ```
+    export LD_LIBRARY_PATH=/apps/local/gcc11.2.0/lib64:$LD_LIBRARY_PATH
+    ```
 
-<br />
+- After running the 2 commands above, the environment issue should be resolved. Then, re-run the following command to install Detectron2:
 
-### **Step 3:** Fetch the Dataset:
-
-```
-conda install -c anaconda svn
-```
-
-```
-mkdir dataset
-```
-
-```
-svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_new ./dataset/roadstress_new
-```
-
-```
-svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_old ./dataset/roadstress_old
-```
+    ```
+    python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
+    ```
 
 <br />
 
-### **Step 4:** Train the Models:
+### **Step 3:** Train the Models:
 
 ```bash
 sbatch running_script/train.sh [dataset_name] [backbone_model]
@@ -146,7 +132,7 @@ sbatch running_script/train.sh [dataset_name] [backbone_model]
 
 <br />
 
-### **Step 5:** Evaluating/Inferencing the Trained Models:
+### **Step 4:** Evaluating/Inferencing the Trained Models:
 
 **Inferencing:**
 
@@ -215,26 +201,7 @@ python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 
 <br />
 
-### **Step 3:** Fetch the Dataset:
-```
-conda install -c anaconda svn
-```
-
-```
-mkdir dataset
-```
-
-```
-svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_new ./dataset/roadstress_new
-```
-
-```
-svn export https://github.com/KossBoii/RoadDamageDetection.git/trunk/roadstress_old ./dataset/roadstress_old
-```
-
-<br />
-
-### **Step 4:** Train the Models:
+### **Step 3:** Train the Models:
 
 ```
 python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
@@ -242,7 +209,7 @@ python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 
 <br />
 
-### **Step 5:** Evaluating/Inferencing the Trained Models:
+### **Step 4:** Evaluating/Inferencing the Trained Models:
 
 **Inferencing:**
 
