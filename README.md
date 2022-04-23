@@ -134,17 +134,25 @@ sbatch running_script/train.sh [dataset_name] [backbone_model]
 
 ### **Step 4:** Evaluating/Inferencing the Trained Models:
 
-**Inferencing:**
-
-```
-sbatch running_script/update_predict.sh [list of models' name]
-```
-
 **Evaluation:**
 
 ```
 sbatch running_script/evaluate.sh [list of models' name]
 ```
+
+**Inferencing:**
+
+```
+sbatch running_script/inference.sh [train_model_name] [testing_image_path] [confidence_threshold]
+```
+
+#### Note:
+
+- tmn (trained model name): the model name wanted to run inference script, which can be found under `[output]` folder
+
+- tip (testing image path): the path to user's testing images
+
+- ct (confidence threshold): value between 0 and 1. Used to determine whether one is an instance or not
 
 <br />
 <br />
@@ -211,23 +219,25 @@ python train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 
 ### **Step 4:** Evaluating/Inferencing the Trained Models:
 
-**Inferencing:**
-
-```
-python update_infer.py --config-file "./output/[folder_name]/config.yaml" \
-			--dataset "./dataset/" \
-		 	--weight "./output/[folder_name]/model_final.pth" \
-		 	--output "./prediction/[folder_name]"
-```
-
 **Evaluation:**
 
 ```
-python evaluate.py --config-file "./output/[folder_name]/config.yaml" \
-			--dataset "./dataset/" \
-		 	--weight "./output/[folder_name]/model_final.pth" \
-		 	--output "./prediction/[folder_name]"
+python evaluate.py --model-name=[tmn]
 ```
+
+**Inferencing:**
+
+```
+python inference.py --model-name=[tmn] --img-path=[tip] --confidence-threshold=[ct]
+```
+
+#### Note:
+
+- tmn (trained model name): the model name wanted to run inference script, which can be found under `[output]` folder
+
+- tip (testing image path): the path to user's testing images
+
+- ct (confidence threshold): value between 0 and 1. Used to determine whether one is an instance or not
 
 <br />
 <br />
