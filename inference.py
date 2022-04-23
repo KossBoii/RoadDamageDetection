@@ -1,5 +1,6 @@
 from utils import *
 logger = logging.getLogger("detectron2")
+from detectron2.utils.visualizer import Visualizer, ColorMode
 
 def get_config(args):
     # load config from file and command-line arguments
@@ -71,7 +72,7 @@ if __name__ == "__main__":
         temp = file_name.lower()
         if temp.endswith('.jpg') or temp.endswith('.jpeg') or temp.endswith('png'):
             # The file is an image
-            img = cv2.imread(file_name)
+            img = cv2.imread(os.path.join(args.img_path, file_name))
             
             start_time = time.time()
             predictions, vis_img = run_on_image(predictor, dataset_name, img)
@@ -86,4 +87,4 @@ if __name__ == "__main__":
             	)
         
         # save the image to the prediction directory
-        vis_img.save(os.path.join(inference_output_path, os.path.basename(file_name)))
+        vis_img.save(os.path.join(inference_output_path, dataset_name, file_name))
