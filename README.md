@@ -106,14 +106,14 @@ gcc: error: unrecognized command line option '-std=c++14'
 error: command 'usr/bin/gcc' failed with exit code 1
 ```
 
-To resolve this, run the commands below:
+To resolve this, run the commands below to tell the system the path to the gcc version that supports c++14:
 
 ```
-export PATH=/apps/local/gcc-11.2.0/bin:$PATH
+export PATH=/apps/local/gcc11.2.0/bin:$PATH
 ```
 
 ```
-export LD_LIBRARY_PATH=/apps/local/gcc-11.2.0/lib64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/apps/local/gcc11.2.0/lib64:$LD_LIBRARY_PATH
 ```
 
 <br />
