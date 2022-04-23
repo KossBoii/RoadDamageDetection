@@ -33,9 +33,9 @@ if __name__ == "__main__":
 
     # Register User's Dataset
     for d in ['train', 'val']:
-        DatasetCatalog.register(args.training_dataset + '_' + d, lambda d=d: get_dataset_dicts(os.path.join(dataset_basepath, d)))
-        MetadataCatalog.get(args.training_dataset + '_' + d).set(thing_classes = thing_classes)
-        MetadataCatalog.get(args.training_dataset + '_' + d).set(evaluator_type = 'coco')
+        DatasetCatalog.register(dataset_name + '_' + d, lambda d=d: get_dataset_dicts(os.path.join(dataset_basepath, d)))
+        MetadataCatalog.get(dataset_name + '_' + d).set(thing_classes = thing_classes)
+        MetadataCatalog.get(dataset_name + '_' + d).set(evaluator_type = 'coco')
     print('Done Registering the dataset!')
     
     # Set score_threshold for builtin models
