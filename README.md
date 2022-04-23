@@ -204,7 +204,7 @@ python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ### **Step 3:** Train the Models:
 
 ```
-python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
+python train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 ```
 
 <br />
@@ -214,7 +214,7 @@ python3 train.py --training-dataset=[dataset_name] --backbone=[backbone_model]
 **Inferencing:**
 
 ```
-python3 update_infer.py --config-file "./output/[folder_name]/config.yaml" \
+python update_infer.py --config-file "./output/[folder_name]/config.yaml" \
 			--dataset "./dataset/" \
 		 	--weight "./output/[folder_name]/model_final.pth" \
 		 	--output "./prediction/[folder_name]"
@@ -223,7 +223,7 @@ python3 update_infer.py --config-file "./output/[folder_name]/config.yaml" \
 **Evaluation:**
 
 ```
-python3 evaluate.py --config-file "./output/[folder_name]/config.yaml" \
+python evaluate.py --config-file "./output/[folder_name]/config.yaml" \
 			--dataset "./dataset/" \
 		 	--weight "./output/[folder_name]/model_final.pth" \
 		 	--output "./prediction/[folder_name]"
