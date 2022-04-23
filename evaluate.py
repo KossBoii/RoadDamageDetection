@@ -24,7 +24,7 @@ if __name__ == "__main__":
     cfg.merge_from_file(os.path.join(os.getcwd(), 'output', args.model_name, 'config.yaml'))
     cfg.merge_from_list(args.opts)                  # configs from user's arguments
 
-    dataset_name = print(cfg.DATASETS.TEST[0][:-6])
+    dataset_name = cfg.DATASETS.TEST[0][:-6]
 
     # Pre-process the annotation files
     dataset_basepath = os.path.join('./dataset', dataset_name)
@@ -58,5 +58,5 @@ if __name__ == "__main__":
     for d in ['train', 'val']:
         eval_output_dir = os.path.join(os.getcwd(), 'eval_output', dataset_name, d)
         evaluator = COCOEvaluator(dataset_name + '_' + d, output_dir=eval_output_dir)
-        val_loader = build_detection_test_loader(cfg,)
+        val_loader = build_detection_test_loader(cfg, dataset_name + '_' + d)
         print(inference_on_dataset(predictor.model, val_loader, evaluator))
