@@ -25,7 +25,7 @@ def get_config(args, num_classes):
 
     # dataset configuration  
     cfg.DATASETS.TRAIN = (args.training_dataset + "_train",)
-    cfg.DATASETS.TEST = ("roadstress_new_val", "roadstress_new_val")
+    cfg.DATASETS.TEST = (args.training_dataset + "_train", args.training_dataset + "_val",)
     
     cfg.DATALOADER.NUM_WORKERS = 8
     cfg.SOLVER.IMS_PER_BATCH = 2                    # 2 GPUs --> each GPU will see 1 image per batch
