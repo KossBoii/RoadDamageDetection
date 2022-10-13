@@ -24,36 +24,36 @@ if [ $# -eq 0 ]
 	declare -a folderNames=()
 
 	if [ $# == 0 ]
-	then
-		folderNames+=(`ls ./output/ -I ^06*$`)
+		then
+			folderNames+=(`ls ./output/ -I ^06*$`)
+		else
+			for folder in "$@"
+			do
+				folderNames+=($folder)
+			done
+		fi
+
+		for folder in "${folderNames[@]}"
+		do
+			if [[ ! -f "./output/$folder/model_final.pth" ]]
+			then
+				echo "model_final.pth file does not exist! Skip evaluating for this folder $folder"
+			else
+				echo "=========================================="
+				srun python3 evaluate.py --model-name=$folder
+				echo "=========================================="	
+			fi
+		done
 	else
 		for folder in "$@"
 		do
-			folderNames+=($folder)
+			if [[ ! -f "./output/$folder/model_final.pth" ]]
+			then
+				echo "model_final.pth file does not exist! Skip evaluating for this folder $folder"
+			else
+				echo "=========================================="
+				srun python3 evaluate.py --model-name=$folder
+				echo "=========================================="	
+			fi
 		done
-	fi
-
-	for folder in "${folderNames[@]}"
-	do
-		if [[ ! -f "./output/$folder/model_final.pth" ]]
-		then
-			echo "model_final.pth file does not exist! Skip evaluating for this folder $folder"
-		else
-			echo "=========================================="
-			srun python3 evaluate.py --model-name=$folder
-			echo "=========================================="	
-		fi
-	done
-else
-	for folder in "$@"
-	do
-		if [[ ! -f "./output/$folder/model_final.pth" ]]
-		then
-			echo "model_final.pth file does not exist! Skip evaluating for this folder $folder"
-		else
-			echo "=========================================="
-			srun python3 evaluate.py --model-name=$folder
-			echo "=========================================="	
-		fi
-	done
 fi
